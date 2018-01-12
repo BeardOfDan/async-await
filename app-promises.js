@@ -67,10 +67,39 @@ const getStatus = (userId) => {
     });
 };
 
-getStatus(1)
+// getStatus(1)
+//   .then((status) => {
+//     console.log(status);
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
+
+// ========================
+
+const getStatusAlt = async (userId) => {
+  const user = await getUser(userId);
+  const grades = await getGrades(user.schoolId);
+
+  if (grades.length > 0) {
+    const average = grades.reduce((memo, grade, grades) => {
+      return memo + grade.grade;
+    }, 0) / grades.length;
+
+    return `${user.name} has an average of ${average}%`;
+  }
+
+  return `${user.name} has no grades!`;
+};
+
+getStatusAlt(1)
   .then((status) => {
     console.log(status);
   })
   .catch((e) => {
-    console.log(e);
+    console.log('error:', e);
   });
+
+
+
+
