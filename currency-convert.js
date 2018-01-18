@@ -21,6 +21,10 @@ const getCountries = (currencyCode) => {
       return response.data.map((country) => {
         return country.name;
       });
+    })
+    .catch((e) => {
+      console.log('Error in getCountries with argument:', currencyCode);
+      return 'Error in getCountries: ' + currencyCode;
     });
 };
 
@@ -31,15 +35,22 @@ const convertCurrency = (from, to, amount) => {
     });
   }
 
+  let countries;
+
   return getCountries(to)
-    .then((countries) => {
+    .then((tempCountries) => {
+      countries = tempCountries;
       return getExchangeRate(from, to);
     })
     .then((rate) => {
       const exchangedAmount = amount * rate;
 
-      return `${amount} ${from} is worth ${exchangedAmount} ${to}.`;
-    });
+      return `${amount} ${from} is worth ${exchangedAmount} ${to}. ${to} can be used in the following countrie(s): ${countries.join(', ')}`;
+    })
+    .catch((e) => {
+      console.log('Error in getCountries with argument:', to);
+      return 'Error in convertCurrency: ' + to;
+    })
 };
 
 convertCurrency('USD', 'CAD', 23).then((conversion) => {
