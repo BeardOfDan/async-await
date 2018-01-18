@@ -31,7 +31,7 @@ const getCountries = (currencyCode) => {
 const convertCurrency = (from, to, amount) => {
   if (from === to) { // handle edge case
     return new Promise((resolve, reject) => {
-      resolve(`${amount} ${from} is worth ${amount} ${to}.`);
+      resolve(`Have a think about what you just did and then try something else.`);
     });
   }
 
@@ -53,7 +53,7 @@ const convertCurrency = (from, to, amount) => {
     })
 };
 
-convertCurrency('USD', 'CAD', 23).then((conversion) => {
+convertCurrency('CAD', 'USD', 23).then((conversion) => {
   console.log(conversion);
 });
 
