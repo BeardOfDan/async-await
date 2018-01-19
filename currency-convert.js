@@ -1,11 +1,3 @@
-// USD CAD 23 -> Canadian equivilant of $23
-// 23 USD is worth convertedValue CAD. You can spend these in the following countries: listingOfCountries
-
-// http://api.fixer.io/latest?base=USD
-
-// https://restcountries.eu/rest/v2/currency/cop
-
-
 const axios = require('axios');
 
 const getExchangeRate = (from, to) => {
@@ -44,16 +36,30 @@ const convertCurrency = (from, to, amount) => {
     })
     .then((rate) => {
       const exchangedAmount = amount * rate;
-
       return `${amount} ${from} is worth ${exchangedAmount} ${to}. ${to} can be used in the following countrie(s): ${countries.join(', ')}`;
     })
     .catch((e) => {
       console.log('Error in getCountries with argument:', to);
       return 'Error in convertCurrency: ' + to;
-    })
+    });
 };
 
-convertCurrency('CAD', 'USD', 23).then((conversion) => {
+// Create convertCurrencyAlt as async function
+const convertCurrencyAlt = async (from, to, amount) => {
+  if (from === to) { // handle edge case
+    return new Promise((resolve, reject) => {
+      resolve(`Have a think about what you just did and then try something else.`);
+    });
+  }
+
+  const countries = await getCountries(to);
+  const rate = await getExchangeRate(from, to);
+  const exchangedAmount = amount * rate;
+
+  return `${amount} ${from} is worth ${exchangedAmount} ${to}. ${to} can be used in the following countrie(s): ${countries.join(', ')}`;
+};
+
+convertCurrencyAlt('CAD', 'USD', 100).then((conversion) => {
   console.log(conversion);
 });
 
