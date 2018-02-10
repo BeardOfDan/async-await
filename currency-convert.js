@@ -3,9 +3,15 @@ const axios = require('axios');
 const getExchangeRate = async (from, to) => {
   try {
     const response = await axios.get(`http://api.fixer.io/latest?base=${from}`);
-    return response.data.rates[to];
+    const rate = response.data.rates[to];
+
+    if (rate) {
+      return rate;
+    } else {
+      throw new Error();
+    }
   } catch (e) {
-    throw new Error(`Unable to get exchange rate for ${from} and ${to}`);
+    throw new Error(`Unable to get exchange rate for ${from} and ${to}.`);
   }
 };
 
